@@ -1,12 +1,15 @@
-import React, { Component } from "react";
-import MainPage from "./components/MainPage";
+import logo from './logo.svg';
+import './App.css';
+import NavBar from './components/NavBar';
+import StateEditor from './components/StateEditor';
 
-const App = () => {
+function App() {
   return (
-    <div className="app">
-      <MainPage />
+    <div className="App">
+      <NavBar/>
+      <StateEditor states={['q1','q2']}/>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

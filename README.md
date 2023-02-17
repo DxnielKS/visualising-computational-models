@@ -1,3 +1,6 @@
+# visualising-computational-models
+ My individual project for my third year at KCL :)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
