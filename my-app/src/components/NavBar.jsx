@@ -14,8 +14,8 @@ import MenuItem from '@mui/material/MenuItem';
 import ComputerIcon from '@mui/icons-material/Computer';
 import { Link } from 'react-router-dom';
 
-const pages = [];
-// const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Home','About','Import','Export'];
+const settings = ['Profile', 'Account', 'Machines', 'Logout'];
 
 function NavBar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -28,7 +28,7 @@ function NavBar() {
         setAnchorElUser(event.currentTarget);
     };
 
-    const handleCloseNavMenu = () => {
+    const handleCloseNavMenu = (props) => {
         setAnchorElNav(null);
     };
 
@@ -82,7 +82,7 @@ function NavBar() {
                             {pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                                     <Typography textAlign="center">
-                                        <Link to={`/${page}`}>
+                                        <Link to={`/${page}`} style={{ color: '#FFF' }}>
                                             {page}
                                         </Link>
                                     </Typography>
@@ -90,6 +90,7 @@ function NavBar() {
                             ))}
                         </Menu>
                     </Box>
+
                     <Typography
                         variant="h5"
                         noWrap
@@ -115,11 +116,40 @@ function NavBar() {
                                 onClick={handleCloseNavMenu}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
                             >
-                                {/* <Link to={`/${page}`}>
+                                <Link to={`/${page}`} style={{ color: '#FFF' }}>
                                     {page}
-                                </Link> */}
+                                </Link>
                             </Button>
                         ))}
+                    </Box>
+                    <Box sx={{ flexGrow: 0 }}>
+                        <Tooltip title="Open settings">
+                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                <Avatar alt="Daniel Saisani"/>
+                            </IconButton>
+                        </Tooltip>
+                        <Menu
+                            sx={{ mt: '45px' }}
+                            id="menu-appbar"
+                            anchorEl={anchorElUser}
+                            anchorOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            keepMounted
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                            open={Boolean(anchorElUser)}
+                            onClose={handleCloseUserMenu}
+                        >
+                            {settings.map((setting) => (
+                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                    <Typography textAlign="center">{setting}</Typography>
+                                </MenuItem>
+                            ))}
+                        </Menu>
                     </Box>
                 </Toolbar>
             </Container>
