@@ -12,6 +12,10 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useHistory } from "react-router-dom";
+import { useAuth, AuthProvider, AuthContext} from "../AuthContext";
+import { useContext, useState } from "react";
+
 
 function Copyright(props) {
   return (
@@ -29,13 +33,31 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function SignInSide() {
+
+  const { login, setUser } = useContext(AuthContext);
+
+  const history = useHistory();
+
   const handleSubmit = (event) => {
     event.preventDefault();
+
     const data = new FormData(event.currentTarget);
+
     console.log({
       email: data.get('email'),
       password: data.get('password'),
     });
+
+    let email = data.get('email')
+    let password = data.get('password')
+
+    let user = login(email,password)
+
+    console.log(user)
+
+    history.push("/"); // redirect to main page
+
+
   };
 
   return (
@@ -107,7 +129,7 @@ export default function SignInSide() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                  <Link href="/Reset" variant="body2">
                     Forgot password?
                   </Link>
                 </Grid>
@@ -118,6 +140,7 @@ export default function SignInSide() {
                 </Grid>
               </Grid>
               {/* <Copyright sx={{ mt: 5 }} /> */}
+              {/* <Forgot/> */}
             </Box>
           </Box>
         </Grid>

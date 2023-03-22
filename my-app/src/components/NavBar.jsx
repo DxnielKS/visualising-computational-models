@@ -13,23 +13,22 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ComputerIcon from '@mui/icons-material/Computer';
 import { Link } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
+import { useAuth, AuthProvider, AuthContext} from "../AuthContext";
 
 function NavBar() {
 
-    var user = useRef(null);
-
-    console.log(user);
+    const { currentUser } = useContext(AuthContext);
 
     const pages = ['About', 'Import', 'Export'];
 
-    const [anchorElNav, setAnchorElNav] = useState(null);
-    const [anchorElUser, setAnchorElUser] = useState(null);
+    const [anchorElNav, setAnchorElNav] = useState(false);
+    const [anchorElUser, setAnchorElUser] = useState(false);
 
     const [settings, setSettings] = useState(['Login', 'Register']);
 
     useEffect(() => {
-        if (user.current) {
+        if (currentUser) {
             setSettings(['Profile', 'Account', 'Machines', 'Logout'])
         }
         else {
@@ -65,7 +64,7 @@ function NavBar() {
                         href="/"
                         sx={{
                             mr: 2,
-                            display: { xs: 'none', md: 'flex' },
+                            // display: { xs: 'none', md: 'flex' },
                             fontFamily: 'monospace',
                             fontWeight: 700,
                             letterSpacing: '.3rem',
