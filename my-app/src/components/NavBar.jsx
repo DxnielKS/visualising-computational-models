@@ -13,18 +13,35 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ComputerIcon from '@mui/icons-material/Computer';
 import { Link } from 'react-router-dom';
-
-const pages = ['Home','About','Import','Export'];
-const settings = ['Profile', 'Account', 'Machines', 'Logout'];
+import { useState, useEffect, useRef } from 'react';
 
 function NavBar() {
-    const [anchorElNav, setAnchorElNav] = React.useState(null);
-    const [anchorElUser, setAnchorElUser] = React.useState(null);
+
+    var user = useRef(null);
+
+    console.log(user);
+
+    const pages = ['About', 'Import', 'Export'];
+
+    const [anchorElNav, setAnchorElNav] = useState(null);
+    const [anchorElUser, setAnchorElUser] = useState(null);
+
+    const [settings, setSettings] = useState(['Login', 'Register']);
+
+    useEffect(() => {
+        if (user.current) {
+            setSettings(['Profile', 'Account', 'Machines', 'Logout'])
+        }
+        else {
+            setSettings(['Login', 'Register'])
+        }
+    }, [])
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
     };
     const handleOpenUserMenu = (event) => {
+
         setAnchorElUser(event.currentTarget);
     };
 
@@ -125,7 +142,7 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Daniel Saisani"/>
+                                <Avatar/>
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -146,7 +163,10 @@ function NavBar() {
                         >
                             {settings.map((setting) => (
                                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting}</Typography>
+                                    {/* <Typography textAlign="center">{setting}</Typography> */}
+                                    <Link to={`/${setting}`} style={{ color: '#000' }}>
+                                        {setting}
+                                    </Link>
                                 </MenuItem>
                             ))}
                         </Menu>
