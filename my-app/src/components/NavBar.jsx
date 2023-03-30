@@ -27,14 +27,16 @@ function NavBar() {
 
     const [settings, setSettings] = useState(['Login', 'Register']);
 
+    // console.log(currentUser);
+
     useEffect(() => {
         if (currentUser) {
-            setSettings(['Profile', 'Account', 'Machines', 'Logout'])
+            setSettings(['Profile', 'Machines', 'Logout'])
         }
         else {
             setSettings(['Login', 'Register'])
         }
-    }, [])
+    }, [currentUser])
 
     const handleOpenNavMenu = (event) => {
         setAnchorElNav(event.currentTarget);
@@ -141,7 +143,7 @@ function NavBar() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar/>
+                            <Avatar>{currentUser && currentUser.displayName ? currentUser.displayName[0] : '?'}</Avatar>
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -162,7 +164,6 @@ function NavBar() {
                         >
                             {settings.map((setting) => (
                                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    {/* <Typography textAlign="center">{setting}</Typography> */}
                                     <Link to={`/${setting}`} style={{ color: '#000' }}>
                                         {setting}
                                     </Link>

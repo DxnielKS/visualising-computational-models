@@ -2,10 +2,15 @@ import React from 'react'
 
 const MemoryTape = () => {
 
-    // define 
-    let memoryTape = [];
+  const [memory, setMemory] = useState([0,0,0])
+
   return (
+    <>
     <div>MemoryTape</div>
+    <div className="memoryTape">
+      {memory}
+    </div>
+    </>
   )
 }
 

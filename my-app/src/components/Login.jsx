@@ -34,7 +34,7 @@ const theme = createTheme();
 
 export default function SignInSide() {
 
-  const { login, setUser } = useContext(AuthContext);
+  const { login } = useContext(AuthContext);
 
   const history = useHistory();
 
@@ -48,15 +48,13 @@ export default function SignInSide() {
       password: data.get('password'),
     });
 
-    let email = data.get('email')
-    let password = data.get('password')
+    let email = data.get('email');
+    let password = data.get('password');
 
-    let user = login(email,password)
+    login(email,password);
 
-    console.log(user)
 
     history.push("/"); // redirect to main page
-
 
   };
 

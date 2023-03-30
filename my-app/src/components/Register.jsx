@@ -15,6 +15,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useHistory } from "react-router-dom";
 import { useAuth, AuthProvider, AuthContext} from "../AuthContext";
+import { updateProfile } from 'firebase/auth';
 
 function Copyright(props) {
   return (
@@ -33,25 +34,31 @@ const theme = createTheme();
 
 export default function SignUp() {
 
-  const { signup, setUser } = useContext(AuthContext);
+  const { signup, updateProfileNameAndPicture } = useContext(AuthContext);
 
   const history = useHistory();
 
   const handleSubmit = (event) => {
 
-
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
+    let email = data.get('email')
+    let password = data.get('password')
+    let firstName = data.get('firstName')
+    let lastName = data.get('lastName')
 
     console.log({
       email: data.get('email'),
       password: data.get('password'),
+      firstName : data.get('firstName'),
+      lastName : data.get('lastName'),
+      displayName : firstName+' '+lastName,
     });
 
-    let email = data.get('email')
-    let password = data.get('password')
+    let display = firstName+' '+lastName
 
-    let user = signup(email,password)
+    let user = signup(email,password,display);
 
     history.push('/')
 
@@ -70,7 +77,7 @@ export default function SignUp() {
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+            <LockOutlinedIcon/>
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign up
@@ -120,10 +127,10 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
-                <FormControlLabel
+                {/* <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
                   label="I want to receive inspiration, marketing promotions and updates via email."
-                />
+                /> */}
               </Grid>
             </Grid>
             <Button
