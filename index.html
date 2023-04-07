@@ -1,0 +1,188 @@
+<html lang="en">
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="icon" href="https://mathshistory.st-andrews.ac.uk/Biographies/Turing/thumbnail.jpg">
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis-network.min.js"></script>
+<style>
+    html,
+    body {
+        height: 100%
+    }
+
+    .container {
+        height: calc(100% - 60px)
+    }
+
+    .tape_box {
+        width: 40px;
+        height: 40px;
+        border: 3px solid black;
+    }
+
+    .tape_table {
+        margin: auto;
+        max-width: 80%;
+        overflow-x: scroll;
+    }
+
+    .tape_table table,
+    th,
+    td {
+        border: 1px solid black;
+        text-align: center;
+        table-layout: fixed;
+        font-size: 40px;
+        border-collapse: collapse;
+    }
+
+    .tape_table td {
+        width: 60px;
+        height: 60px;
+    }
+
+    #currently_active {
+        border: 5px solid orange;
+    }
+</style>
+
+<title>Turing Machine Simulator</title>
+<captcha-widgets></captcha-widgets></head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">
+            <img src="https://mathshistory.st-andrews.ac.uk/Biographies/Turing/thumbnail.jpg" height="30"
+                class="d-inline-block align-top" style="border-radius:100px" alt="">
+            Turing Machine Simulator
+        </a>
+
+        </div>
+    </nav>
+
+    <div class="container" style="padding:30px 0px">
+
+        <h1>Tutorial</h1>
+        <p>In order to use this tool, use the toolbar below to either run the existing machine or to create your own
+            machine.<br />To create your own machine:<br />1. Add as many nodes as necessary.<br />2. Add your
+            transitions between states by highlighting a node to transition from and clicking "from" and the same
+            respectively for the node to transition to and add a the read/write symbols as well as the direction for the
+            heade to move in.<br />3. Add your memory tape into the "tape contents" and clicking change tape.<br />4.
+            Start the simulation at the speed set with the slider above the page.<br/>*NOTE, THIS SIMULATOR DOES NOT HANDLE NON-DETERMINISTIC TRANSITIONS AT THE MOMENT, THE MACHINE WILL NOT BEHAVE AS EXPECTED*</p>
+
+        <h1>Machine Diagram</h1>
+        <div class="import_export">
+
+            <button type="button" id="import-button" class="btn btn-light" onclick="importGraph()">Import</button>
+            <!-- <input type="file" id="import-button"> -->
+            <button type="button" id="export-button" class="btn btn-dark" onclick="exportGraph()">Export</button>
+
+            <h5>The language of the strings that contain a number of 1s which is a power of 2.</h5>
+
+        </div>
+        <div class="container bg-light" style="min-width:60%;height:60%">
+            <div id="mynetwork">
+            </div>
+        </div>
+
+        <div class="row pt-2">
+            <label for="playback_speed" class="form-label" id="playback_icon">Playback Speed: 1000ms</label>
+            <input type="range" class="form-range" value="1000" min="100" max="1000" step="50" id="playback_speed"
+                onchange="changePlayback(this)">
+        </div>
+
+
+        <div class="row pt-2">
+            <h3 style="margin:auto; width:100%; text-align: center;">TAPE</h3>
+            <table class="tape_table">
+                <tr id="table_table_row">
+                </tr>
+            </table>
+
+        </div>
+        <div class="row pt-2">
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <input type="text" id="tape_input" class="form-control" placeholder="Tape Content"
+                        aria-label="Tape Content" aria-describedby="basic-addon1">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" onclick="changeTape()">Change Tape</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <!-- <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="rejecting_state">
+                    <label class="form-check-label" for="rejecting_state">
+                        Rejecting
+                    </label>
+                </div> -->
+                <!-- <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="accepting_state">
+                    <label class="form-check-label" for="accepting_state">
+                        Accepting
+                    </label>
+                </div> -->
+                <!-- <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="initial_state">
+                    <label class="form-check-label" for="initial_state">
+                        Initial
+                    </label>
+                </div> -->
+                <button class="btn btn-warning" type="button" onclick="addNode()">Add Node</button>
+                <button class="btn btn-danger" type="button" onclick="deleteElement()">Delete Node/Edge</button>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary" type="button" onclick="runMachine()">Run Machine</button>
+            </div>
+            <div class="col-md-3">
+                <button type="text" id="from_button" class="btn btn-primary" class="form-control"
+                    onclick="selectTo(this)">From</button>
+                <input type="text" id="read_input" class="form-control" placeholder="Read">
+                <input type="text" id="write_input" class="form-control" placeholder="Write">
+                <!-- <div class="custom-control custom-switch">
+                        <input type="checkbox" id="left_right" class="custom-control-input" id="rl_switch">
+                        <label class="custom-control-label" for="customSwitch1">R/L</label>
+                      </div> -->
+                <input type="text" id="left_right" class="form-control" placeholder="R/L">
+
+                <button type="text" id="to_button" class="btn btn-primary" class="form-control"
+                    onclick="selectTo(this)">To</button>
+
+
+                <button type="text" class="btn btn-warning" class="form-control" onclick="addEdge()">Add Edge</button>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+
+    <script>
+    </script>
+
+</body>
+
+</html>
