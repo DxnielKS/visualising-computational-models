@@ -1,11 +1,7 @@
 Turing machine simulator, visualsier and constructor.
-Daniel Saisani K20015901
+Daniel Saisani
 
 This tool constructs and runs Turing machines on given inputs.
-
-
-
-
 
 Usage:
 INSTRUCTIONS FOR CODE.
