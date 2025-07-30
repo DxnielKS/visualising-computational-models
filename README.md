@@ -1,4 +1,4 @@
-Turing machine simulator, visualsier and constructor.
+Turing machine simulator, visualiser and constructor.
 Daniel Saisani
 
 This tool constructs and runs Turing machines on given inputs.
